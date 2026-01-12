@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import backgroundMusic from '/background-music.mp3';
 import IntroCard from './components/cards/IntroCard';
 import HeaderCard from './components/cards/HeaderCard';
 import CakeCard from './components/cards/CakeCard';
@@ -82,7 +83,7 @@ const App: React.FC = () => {
       {/* Audio Element for Background Music */}
       <audio 
         ref={audioRef} 
-        src="background-music.mp3"
+        src={backgroundMusic}
         crossOrigin="anonymous"
         preload="auto"
       />

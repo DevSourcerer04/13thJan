@@ -29,7 +29,7 @@ The goal was to keep everything:
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **React**
 - **TypeScript**
@@ -45,7 +45,8 @@ The goal was to keep everything:
 
 - Clone the repo in your folder directory first
 
-git clone ""
+    ```bash
+    git clone "https://github.com/DevSourcerer04/13thJan.git"
 
 - build and deploy
 

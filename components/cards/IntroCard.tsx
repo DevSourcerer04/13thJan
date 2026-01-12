@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import BackgroundLayer from '../BackgroundLayer';
 
@@ -64,7 +64,24 @@ const SnowBackground = () => (
   </div>
 );
 
-const IntroCard: React.FC<{ isActive: boolean }> = ({ isActive }) => {
+const IntroCard: React.FC<{ isActive: boolean; isMusicPlaying?: boolean; onMusicToggle?: () => void }> = ({ isActive, isMusicPlaying = false, onMusicToggle }) => {
+  const [glitterParticles, setGlitterParticles] = useState<Array<{ id: number; left: number; delay: number }>>([]);
+
+  const handleButtonClick = () => {
+    onMusicToggle?.();
+    
+    // Create a wave of glitter particles across the entire width
+    const particles = Array.from({ length: 120 }).map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 0.3, // Stagger particles for wave effect
+    }));
+    
+    setGlitterParticles(particles);
+    
+    // Clear particles after animation completes
+    setTimeout(() => setGlitterParticles([]), 2500);
+  };
   return (
     <div className="w-full h-full flex flex-col items-center justify-center bg-[#0F172A] px-4 text-center relative overflow-hidden">
       <BackgroundLayer isActive={isActive}>
@@ -89,6 +106,44 @@ const IntroCard: React.FC<{ isActive: boolean }> = ({ isActive }) => {
           I made something small — <br className="md:hidden" /> just for your birthday.
         </motion.p>
       </motion.div>
+
+      {/* Music Toggle Button - Above scroll to begin text */}
+      <button
+        onClick={handleButtonClick}
+        className="absolute bottom-24 md:bottom-32 flex items-center justify-center px-12 py-6 md:px-16 md:py-8 rounded-full bg-[#D4AF37]/10 hover:bg-[#D4AF37]/20 transition-colors border border-[#D4AF37]/30 hover:border-[#D4AF37]/60"
+        title={isMusicPlaying ? 'Pause music' : 'Play music'}
+      >
+        <span className="text-[#D4AF37] font-bold italic text-xl md:text-3xl">click me and then scroll!</span>
+      </button>
+
+      {/* Glitter Wave Effect */}
+      {glitterParticles.map((particle) => (
+        <motion.div
+          key={particle.id}
+          className="fixed pointer-events-none"
+          style={{
+            left: `${particle.left}%`,
+            top: '-20px',
+            width: `${Math.random() * 6 + 4}px`,
+            height: `${Math.random() * 6 + 4}px`,
+            background: 'radial-gradient(circle, #FFD700, #FFA500)',
+            borderRadius: '50%',
+            boxShadow: '0 0 10px rgba(212, 175, 55, 0.9), 0 0 20px rgba(255, 215, 0, 0.6)',
+          }}
+          initial={{ opacity: 1, y: 0, scale: 1 }}
+          animate={{ 
+            opacity: 0, 
+            y: '105vh',
+            x: (Math.random() - 0.5) * 100,
+            scale: Math.random() * 0.3 + 0.2,
+          }}
+          transition={{
+            duration: 2.2,
+            delay: particle.delay,
+            ease: 'easeIn',
+          }}
+        />
+      ))}
 
       <motion.div
         animate={{ y: [0, 10, 0], opacity: [0.4, 0.8, 0.4] }}

@@ -20,7 +20,7 @@ const PoemCard: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     "That kind of presence",
     "often goes unnoticed.",
     "It shouldn’t.",
-    "Glad to have you as a pal."
+    "Glad to have you as a pal!"
   ];
 
   return (

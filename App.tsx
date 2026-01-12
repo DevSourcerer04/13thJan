@@ -12,7 +12,9 @@ import FinalCard from './components/cards/FinalCard';
 
 const App: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   
   const totalCards = 9;
 
@@ -38,6 +40,19 @@ const App: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.loop = true;
+      if (isMusicPlaying) {
+        audioRef.current.play().catch(() => {
+          // Autoplay might be blocked, user needs to click play button
+        });
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isMusicPlaying]);
+
   const scrollToSection = (index: number) => {
     if (containerRef.current) {
       const section = containerRef.current.querySelector(`section[data-index="${index}"]`);
@@ -46,7 +61,7 @@ const App: React.FC = () => {
   };
 
   const cards = useMemo(() => [
-    <IntroCard key="intro" isActive={activeCardIndex === 0} />,
+    <IntroCard key="intro" isActive={activeCardIndex === 0} isMusicPlaying={isMusicPlaying} onMusicToggle={() => setIsMusicPlaying(!isMusicPlaying)} />,
     <HeaderCard key="header" isActive={activeCardIndex === 1} />,
     <CakeCard key="cake" isActive={activeCardIndex === 2} />,
     <MessageCard key="message" isActive={activeCardIndex === 3} />,
@@ -62,6 +77,9 @@ const App: React.FC = () => {
       ref={containerRef} 
       className="h-[100dvh] w-full overflow-y-auto snap-y snap-mandatory scroll-smooth bg-[#0F172A] relative"
     >
+      {/* Audio Element for Background Music */}
+      <audio ref={audioRef} src="/background-music.mp3" />
+      
       {/* Fixed accidental ' section>' typo after the closing tag of section */}
       {cards.map((card, idx) => (
         <section 

@@ -1,0 +1,7 @@
+{
+  "name": "Ishani's 21st bday",
+  "description": "A luxury, cinematic, interactive birthday experience for Ishani, featuring horizontal scrolling, interactive cake blowing, and elegant royal animations.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

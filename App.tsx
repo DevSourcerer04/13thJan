@@ -44,8 +44,10 @@ const App: React.FC = () => {
     if (audioRef.current) {
       audioRef.current.loop = true;
       if (isMusicPlaying) {
-        audioRef.current.play().catch(() => {
-          // Autoplay might be blocked, user needs to click play button
+        audioRef.current.volume = 0.5; // Set reasonable volume
+        audioRef.current.play().catch((error) => {
+          console.log('Autoplay blocked:', error);
+          // Browser blocked autoplay - user must click button
         });
       } else {
         audioRef.current.pause();
@@ -78,7 +80,12 @@ const App: React.FC = () => {
       className="h-[100dvh] w-full overflow-y-auto snap-y snap-mandatory scroll-smooth bg-[#0F172A] relative"
     >
       {/* Audio Element for Background Music */}
-      <audio ref={audioRef} src="/background-music.mp3" />
+      <audio 
+        ref={audioRef} 
+        src="background-music.mp3"
+        crossOrigin="anonymous"
+        preload="auto"
+      />
       
       {/* Fixed accidental ' section>' typo after the closing tag of section */}
       {cards.map((card, idx) => (

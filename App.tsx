@@ -46,10 +46,21 @@ const App: React.FC = () => {
       audioRef.current.loop = true;
       if (isMusicPlaying) {
         audioRef.current.volume = 0.5; // Set reasonable volume
-        audioRef.current.play().catch((error) => {
-          console.log('Autoplay blocked:', error);
-          // Browser blocked autoplay - user must click button
-        });
+        
+        // Create a promise for play to handle browser autoplay restrictions
+        const playPromise = audioRef.current.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log('Audio playing successfully');
+            })
+            .catch((error) => {
+              console.error('Audio play failed:', error);
+              // Reset state if play failed
+              setIsMusicPlaying(false);
+            });
+        }
       } else {
         audioRef.current.pause();
       }
@@ -86,6 +97,8 @@ const App: React.FC = () => {
         src={new URL('../background-music.mp3', import.meta.url).href}
         crossOrigin="anonymous"
         preload="auto"
+        controls={false}
+        muted={false}
       />
       
       {/* Fixed accidental ' section>' typo after the closing tag of section */}
